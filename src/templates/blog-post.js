@@ -20,8 +20,8 @@ export const BlogPostTemplate = ({
     <section className="section">
       {helmet || ''}
       <div className="container content">
-        <div className="columns">
-          <div className="column is-10 is-offset-1">
+        <div className="columns is-centered">
+          <div className="column is-two-thirds">
             <h1 className="title is-size-2 has-text-weight-bold is-bold-light">
               {title}
             </h1>

@@ -29,7 +29,12 @@ export default class IndexPage extends React.Component {
                       </Link>
                     </h1>
                     <p>
-                      <small>{post.frontmatter.date}</small>
+                      <small>
+                        Posted
+                        {post.frontmatter.author != null &&
+                          ` by ${post.frontmatter.author}`}
+                        {` on ${post.frontmatter.date}`}
+                      </small>
                     </p>
                     <p>
                       {post.excerpt}
@@ -75,6 +80,7 @@ export const pageQuery = graphql`
             title
             templateKey
             date(formatString: "MMMM DD, YYYY")
+            author
           }
         }
       }

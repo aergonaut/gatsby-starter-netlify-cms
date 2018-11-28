@@ -5,25 +5,25 @@ import Layout from "../components/Layout";
 
 class TagRoute extends React.Component {
   render() {
-    const posts = this.props.data.allMarkdownRemark.edges;
-    const postLinks = posts.map(post => (
-      <li key={post.node.fields.slug}>
-        <Link to={post.node.fields.slug}>
-          <h2 className="is-size-2">{post.node.frontmatter.title}</h2>
+    const { contentfulTag: tag } = this.props.data;
+    const posts = tag.blog_post;
+    const postLinks = posts.map(post => {
+      return (<li key={post.id}>
+        <Link to={post.slug}>
+          <h2 className="is-size-2">{post.title}</h2>
         </Link>
-      </li>
-    ));
-    const tag = this.props.pageContext.tag;
-    const title = this.props.data.site.siteMetadata.title;
-    const totalCount = this.props.data.allMarkdownRemark.totalCount;
+      </li>);
+    });
+    const title = tag.name;
+    const totalCount = posts.length;
     const tagHeader = `${totalCount} post${
       totalCount === 1 ? "" : "s"
-    } tagged with “${tag}”`;
+    } tagged with “${tag.name}”`;
 
     return (
       <Layout>
         <section className="section">
-          <Helmet title={`${tag} | ${title}`} />
+          <Helmet title={`${tag.name} | ${title}`} />
           <div className="container content">
             <div className="columns">
               <div
@@ -49,6 +49,9 @@ export default TagRoute;
 export const tagPageQuery = graphql`
   query TagQuery($slug: String!) {
     contentfulTag(slug: { eq: $slug }) {
+      id
+      name
+      slug
       blog_post {
         id
         title

@@ -43,7 +43,7 @@ exports.createPages = ({ graphql, actions }) => {
 
     const tags = result.data.allContentfulTag.edges;
     tags.forEach(edge => {
-      const slug = edge.slug;
+      const slug = edge.node.slug;
       createPage({
         path: `/tags/${slug}`,
         component: path.resolve("src/templates/tags.js"),

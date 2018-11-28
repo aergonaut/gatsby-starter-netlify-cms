@@ -5,11 +5,11 @@ import { Link, graphql } from 'gatsby'
 import Layout from '../../components/Layout'
 
 const TagsPage = ({
-  data: { allMarkdownRemark: { group }, site: { siteMetadata: { title } } },
+  data: { allContentfulTag: tags },
 }) => (
   <Layout>
     <section className="section">
-      <Helmet title={`Tags | ${title}`} />
+      <Helmet title={`Tags`} />
       <div className="container content">
         <div className="columns">
           <div
@@ -18,10 +18,10 @@ const TagsPage = ({
           >
             <h1 className="title is-size-2 is-bold-light">Tags</h1>
             <ul className="taglist">
-              {group.map(tag => (
-                <li key={tag.fieldValue}>
-                  <Link to={`/tags/${kebabCase(tag.fieldValue)}/`}>
-                    {tag.fieldValue} ({tag.totalCount})
+              {tags.edges.map(tag => (
+                <li key={tag.node.name}>
+                  <Link to={`/tags/${kebabCase(tag.node.name)}/`}>
+                    {tag.node.name} ({tag.node.blog_post.length})
                   </Link>
                 </li>
               ))}
@@ -37,15 +37,14 @@ export default TagsPage
 
 export const tagPageQuery = graphql`
   query TagsQuery {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-    allMarkdownRemark(limit: 1000) {
-      group(field: frontmatter___tags) {
-        fieldValue
-        totalCount
+    allContentfulTag(limit: 1000) {
+      edges {
+        node {
+          name
+          blog_post {
+            id
+          }
+        }
       }
     }
   }

@@ -49,39 +49,39 @@ const AuthorPage = ({
 
 export default AuthorPage;
 
-export const pageQuery = graphql`
-  query AuthorPageQuery($id: String!, $name: String!) {
-    markdownRemark(id: { eq: $id }) {
-      id
-      html
-      frontmatter {
-        title
-        avatar {
-          childImageSharp {
-            fixed(width: 256) {
-              src
-            }
-          }
-        }
-      }
-    }
-    allMarkdownRemark(
-      limit: 1000
-      sort: { fields: [frontmatter___date], order: DESC }
-      filter: { frontmatter: { author: { eq: $name } } }
-    ) {
-      totalCount
-      edges {
-        node {
-          id
-          fields {
-            slug
-          }
-          frontmatter {
-            title
-          }
-        }
-      }
-    }
-  }
-`;
+// export const pageQuery = graphql`
+//   query AuthorPageQuery($id: String!, $name: String!) {
+//     markdownRemark(id: { eq: $id }) {
+//       id
+//       html
+//       frontmatter {
+//         title
+//         avatar {
+//           childImageSharp {
+//             fixed(width: 256) {
+//               src
+//             }
+//           }
+//         }
+//       }
+//     }
+//     allMarkdownRemark(
+//       limit: 1000
+//       sort: { fields: [frontmatter___date], order: DESC }
+//       filter: { frontmatter: { author: { eq: $name } } }
+//     ) {
+//       totalCount
+//       edges {
+//         node {
+//           id
+//           fields {
+//             slug
+//           }
+//           frontmatter {
+//             title
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;

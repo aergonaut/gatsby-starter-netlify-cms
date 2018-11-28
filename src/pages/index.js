@@ -6,7 +6,7 @@ import Layout from "../components/Layout";
 export default class IndexPage extends React.Component {
   render() {
     const { data } = this.props;
-    const { edges: posts } = data.allMarkdownRemark;
+    const { edges: posts } = data.allContentfulBlogPost;
 
     return (
       <Layout>
@@ -21,26 +21,21 @@ export default class IndexPage extends React.Component {
                     key={post.id}
                   >
                     <h1 className="title">
-                      <Link
-                        className="has-text-black-bis"
-                        to={post.fields.slug}
-                      >
-                        {post.frontmatter.title}
+                      <Link className="has-text-black-bis" to={post.slug}>
+                        {post.title}
                       </Link>
                     </h1>
                     <p>
                       <small>
                         Posted
-                        {post.frontmatter.author != null &&
-                          ` by ${post.frontmatter.author}`}
-                        {` on ${post.frontmatter.date}`}
+                        {` on ${post.createdAt}`}
                       </small>
                     </p>
                     <p>
-                      {post.excerpt}
+                      {post.body.childMarkdownRemark.excerpt}
                       <br />
                       <br />
-                      <Link className="button" to={post.fields.slug}>
+                      <Link className="button" to={post.slug}>
                         Keep Reading →
                       </Link>
                     </p>
@@ -55,33 +50,29 @@ export default class IndexPage extends React.Component {
   }
 }
 
-IndexPage.propTypes = {
-  data: PropTypes.shape({
-    allMarkdownRemark: PropTypes.shape({
-      edges: PropTypes.array
-    })
-  })
-};
-
 export const pageQuery = graphql`
   query IndexQuery {
-    allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___date] }
-      filter: { frontmatter: { templateKey: { eq: "blog-post" } } }
-    ) {
+    allContentfulBlogPost(limit: 1000) {
       edges {
         node {
-          excerpt(pruneLength: 400)
           id
-          fields {
+          title
+          slug
+          body {
+            childMarkdownRemark {
+              excerpt
+            }
+          }
+          authors {
+            name
             slug
+            avatar {
+              fluid {
+                base64
+              }
+            }
           }
-          frontmatter {
-            title
-            templateKey
-            date(formatString: "MMMM DD, YYYY")
-            author
-          }
+          createdAt(formatString: "MMMM DD, YYYY")
         }
       }
     }

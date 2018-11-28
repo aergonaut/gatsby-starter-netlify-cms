@@ -1,3 +1,29 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
+let contentfulConfig;
+
+try {
+  // Load the Contentful config from the .contentful.json
+  contentfulConfig = require("./.contentful");
+} catch (_) {}
+
+// Overwrite the Contentful config with environment variables if they exist
+contentfulConfig = {
+  host: `preview.contentful.com`,
+  spaceId: process.env.CONTENTFUL_SPACE_ID || contentfulConfig.spaceId,
+  accessToken:
+    process.env.CONTENTFUL_DELIVERY_TOKEN || contentfulConfig.accessToken
+};
+
+const { spaceId, accessToken } = contentfulConfig;
+
+if (!spaceId || !accessToken) {
+  throw new Error(
+    "Contentful spaceId and the delivery token need to be provided."
+  );
+}
+
 module.exports = {
   siteMetadata: {
     title: "Gatsby + Netlify CMS Starter"
@@ -55,10 +81,8 @@ module.exports = {
       }
     },
     {
-      resolve: "gatsby-plugin-netlify-cms",
-      options: {
-        modulePath: `${__dirname}/src/cms/cms.js`
-      }
+      resolve: "gatsby-source-contentful",
+      options: contentfulConfig
     },
     "gatsby-plugin-netlify" // make sure to keep it last in the array
   ]

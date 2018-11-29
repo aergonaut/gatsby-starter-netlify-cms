@@ -31,6 +31,23 @@ export const BlogPostTemplate = ({
               {` on ${date}`}
             </p>
             <PostContent content={content} />
+            <div style={{ marginTop: "4rem" }}>
+              {authors.map(author => (
+                <div key={author.id} className="columns authorInfo">
+                  <div className="column is-narrow">
+                    <Link to={`/authors/${author.slug}`}>
+                      <img
+                        className="authorAvatar"
+                        src={author.avatar.fixed.src}
+                      />
+                    </Link>
+                  </div>
+                  <div className="column has-text-weight-bold">
+                    <Link to={`/authors/${author.slug}`}>{author.name}</Link>
+                  </div>
+                </div>
+              ))}
+            </div>
             {tags && tags.length ? (
               <div style={{ marginTop: `4rem` }}>
                 <h4>Tags</h4>
@@ -84,8 +101,8 @@ export const pageQuery = graphql`
         name
         slug
         avatar {
-          fluid {
-            base64
+          fixed(width: 64) {
+            src
           }
         }
       }
